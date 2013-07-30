@@ -9,11 +9,22 @@
 
 class NeoAjax {
     public $js = "";
+    public $a = array();
+    public $reload = '';
+
+    /**
+     * @param $str
+     * @return string
+     */
     public function strip($str){
         return addcslashes(preg_replace('!\s+!u', ' ',$str),"'");
     }
+
+    /**
+     * @param bool $forceGet
+     */
     public function reload($forceGet = true){
-        $this->js.="location.reload($forceGet);";
+        $this->reload = $forceGet;
     }
     /**
      * @param $js
@@ -23,26 +34,44 @@ class NeoAjax {
         $js = str_replace("\n" , "" , $js);
         $js = trim($js);
 
-        //$js = addcslashes($js,'"');
         $this->js.= $js;
     }
+
+    /**
+     * Set Alert message
+     * @param $str
+     */
     public function alert($str){
-        $this->js.="alert('$str');";
+        $this->a[] = $str;
     }
+
+    /**
+     * Jquery html function
+     * @param $selector
+     * @param $html
+     */
     public function html($selector, $html){
         $this->js.="$('$selector').html('$html');";
     }
+
+    /**
+     *
+     * @param $selector
+     */
     public function showModal($selector){
         $this->js.="$('$selector').modal('show');";
     }
     /**
-     *
+     * Run script
      */
     public function run(){
-        exit(json_encode(array('script'=>$this->js)));
+        exit(json_encode(array('s'=>$this->js,'a'=>$this->a,'r'=>$this->reload)));
     }
 
+    /**
+     * @return array
+     */
     public function getResult(){
-        return array('script'=>$this->js);
+        return array('s'=>$this->js,'a'=>$this->a,'r'=>$this->reload);
     }
 }
