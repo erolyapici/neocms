@@ -11,14 +11,21 @@ namespace Admin\Model;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Select;
+use Zend\InputFilter\Factory;
 
 class UserTable extends AbstractTableGateway{
     protected $table = 'users';
+    protected $inputFilter;
 
     public function __construct(Adapter $adapter){
         $this->adapter = $adapter;
     }
-   public function fetchAll(Select $select = null){
+
+    /**
+     * @param Select $select
+     * @return array
+     */
+    public function fetchAll(Select $select = null){
         if($select == null){
             $select = new Select();
         }
@@ -39,15 +46,25 @@ class UserTable extends AbstractTableGateway{
             $entities[] = $entity;
         }
         return $entities;
-   }
-   public function get($id){
+    }
+
+    /**
+     * @param $id
+     * @return Entity\User|bool
+     */
+    public function get($id){
         $row = $this->select(array('id'=>(int)$id))->current();
         if(!$row)
             return FALSE;
         $data = new Entity\User($row);
         return $data;
-   }
-   public function save(Entity\User $object){
+    }
+
+    /**
+     * @param Entity\User $object
+     * @return bool|int
+     */
+    public function save(Entity\User $object){
         $data = array(
             'username'  =>$object->getUsername(),
             'name'      =>$object->getName(),
@@ -71,19 +88,7 @@ class UserTable extends AbstractTableGateway{
             return $id;
         }
         return FALSE;
-   }
-    /**
-     * @param \Zend\Db\Adapter\Adapter $adapter
-     * @internal param \Zend\Db\TableGateway\TableGateway $tableGateway
-     *
-    public function __construct(Adapter $adapter){
-        $this->adapter = $adapter;
-        $this->resultSetPrototype = new ResultSet();
-        $this->resultSetPrototype->setArrayObjectPrototype(new User());
-        $this->tableGateway=new TableGateway($this->table,$adapter,null,$this->resultSetPrototype);
-        $this->initialize();
     }
-*/
     public function fetchList(Select $select = null){
         if (null === $select)
             $select = new Select();
@@ -93,41 +98,93 @@ class UserTable extends AbstractTableGateway{
         $resultSet->buffer();
         return $resultSet;
     }
+
     /**
-     * @param $id
-     * @return array|\ArrayObject|null
-     * @throws \Exception
-     *
-    public function get($id){
-        $id = (int)$id;
-        $select = new Select();
-        $rowset = $select->from($this->table)->where(array('id'=>$id));
-        $row = $rowset->current();
-        if(!$row){
-            throw new \Exception("Could not find row $id");
+     * @return \Zend\InputFilter\InputFilterInterface
+     */
+    public function setInputFilter(){
+        if(!$this->inputFilter){
+            $factory = new Factory();
+            $inputFilter = $factory->createInputFilter(
+                array(
+                    'name' => array(
+                        'name'      =>'name',
+                        'required'  =>true,
+                        'filters'   =>array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim'),
+                        ),
+                        'validators'=>array(
+                            array(
+                                'name'  => 'StringLength',
+                                'options'=>array(
+                                    'encoding'  => 'UTF-8',
+                                    'min'       => 3,
+                                    'max'       =>100,
+                                )
+                            )
+                        )
+                    ),
+                    'surname' => array(
+                        'name'      =>'surname',
+                        'required'  =>true,
+                        'filters'   =>array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim'),
+                        ),
+                        'validators'=>array(
+                            array(
+                                'name'  => 'StringLength',
+                                'options'=>array(
+                                    'encoding'  => 'UTF-8',
+                                    'min'       => 3,
+                                    'max'       =>100,
+                                )
+                            )
+                        )
+                    ),
+                    'username' => array(
+                        'name'      =>'username',
+                        'required'  =>true,
+                        'filters'   =>array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim'),
+                        ),
+                        'validators'=>array(
+                            array(
+                                'name'  => 'StringLength',
+                                'options'=>array(
+                                    'encoding'  => 'UTF-8',
+                                    'min'       => 3,
+                                    'max'       =>100,
+                                )
+                            )
+                        )
+                    ),
+                    'email' => array(
+                        'name'      =>'email',
+                        'required'  =>true,
+                        'filters'   =>array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim'),
+                        ),
+                        'validators'=>array(
+                            array(
+                                'name'  => 'StringLength',
+                                'options'=>array(
+                                    'encoding'  => 'UTF-8',
+                                    'min'       => 3,
+                                    'max'       =>100,
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+
+            $this->inputFilter = $inputFilter;
         }
-        return $row;
+
+        return $this->inputFilter;
     }
-    /**
-     * @param User $data
-     * @throws \Exception
-     *
-    public function save(User $data){
-        $insert_data = array(
-            'username'    => $data->username,
-            'name'     => $data->name,
-            'surname'     => $data->surname,
-            'email'     => $data->email,
-        );
-        $id = (int)$data->id;
-        if($id == 0){
-            $this->tableGateway->insert($insert_data);
-        }else{
-            if($this->get($id)){
-                $this->tableGateway->update($insert_data,array('id'=>$id));
-            }else{
-                throw new \Exception("User id does not exist");
-            }
-        }
-    }*/
 }

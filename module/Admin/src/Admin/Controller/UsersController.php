@@ -20,16 +20,15 @@ use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Resolver;
 use Zend\Json\Json;
 use Admin\Model\Entity\User;
-use Zend\I18n\Validator\Alpha;
-use Zend\InputFilter\Factory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Input;
-use Zend\Validator;
+
 
 class UsersController extends AbstractActionController{
     protected $table;
     protected $inputFilter;
 
+    /**
+     * @return array|ViewModel
+     */
     public function indexAction(){
         $select     = new Select();
         $request    = $this->getRequest();
@@ -78,6 +77,10 @@ class UsersController extends AbstractActionController{
             'paginator' =>$paginator
         ));
     }
+
+    /**
+     * @return \Zend\Stdlib\ResponseInterface
+     */
     public function editAction(){
         $neoAjax = new neoAjax();
         $id = (int)$this->params()->fromRoute('id');
@@ -108,9 +111,9 @@ class UsersController extends AbstractActionController{
                 $neoAjax->html('#myModal',$html);
                 $neoAjax->showModal('#myModal');
             }else{
-
                 if($request->isPost()){
-                    $inputFilter = $this->setInputFilter();
+
+                    $inputFilter = $this->getTable()->setInputFilter();
                     $inputFilter->setData($post);
 
                     if($inputFilter->isValid()){
@@ -138,6 +141,10 @@ class UsersController extends AbstractActionController{
         $response->setContent(\Zend\Json\Json::encode($neoAjax->getResult()));
         return $response;
     }
+
+    /**
+     * @return \Zend\Stdlib\ResponseInterface
+     */
     public function addAction(){
         $neoAjax = new neoAjax();
         $request    = $this->getRequest();
@@ -164,16 +171,14 @@ class UsersController extends AbstractActionController{
             $neoAjax->showModal('#myModal');
 
         }else{
-            $form = new \NeoForm('user');
-
             if($request->isPost()){
 
-                $form->setInputFilter($this->getInputFilter());
-                $this->setForm($form);
-                $form->setData($request->getPost());
+                $inputFilter = $this->getTable()->setInputFilter();
+                $inputFilter->setData($post);
 
-                if($form->isValid()){
-                    $entity = new User($form->getData());
+                if($inputFilter->isValid()){
+
+                    $entity = new User($inputFilter->getRawValues());
                     $entity->setState(1);
                     $entity->setGrup_id(1);
                     $entity->setPassword(md5("123456"));
@@ -181,138 +186,18 @@ class UsersController extends AbstractActionController{
                     $neoAjax->alert('İşlem başarılı şekilde gerçekleşti!');
                     $neoAjax->reload();
                 }else{
-                    $messages = $form->getMessages();
+                    $messages = $inputFilter->getMessages();
                     if(!empty($messages)){
                         foreach($messages AS $key=>$message){
                             $neoAjax->html('#'.$key.'_error',$neoAjax->strip(implode(" ",$message)));
                         }
                     }
-
                 }
             }
         }
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode($neoAjax->getResult()));
         return $response;
-    }
-
-    public function setInputFilter(){
-        if(!$this->inputFilter){
-            $factory = new Factory();
-            $inputFilter = $factory->createInputFilter(
-                array(
-                    'name' => array(
-                        'name'      =>'name',
-                        'required'  =>true,
-                        'filters'   =>array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators'=>array(
-                            array(
-                                'name'  => 'StringLength',
-                                'options'=>array(
-                                    'encoding'  => 'UTF-8',
-                                    'min'       => 3,
-                                    'max'       =>100,
-                                )
-                            )
-                        )
-                    ),
-                    'surname' => array(
-                        'name'      =>'surname',
-                        'required'  =>true,
-                        'filters'   =>array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators'=>array(
-                            array(
-                                'name'  => 'StringLength',
-                                'options'=>array(
-                                    'encoding'  => 'UTF-8',
-                                    'min'       => 3,
-                                    'max'       =>100,
-                                )
-                            )
-                        )
-                    ),
-                    'username' => array(
-                        'name'      =>'username',
-                        'required'  =>true,
-                        'filters'   =>array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators'=>array(
-                            array(
-                                'name'  => 'StringLength',
-                                'options'=>array(
-                                    'encoding'  => 'UTF-8',
-                                    'min'       => 3,
-                                    'max'       =>100,
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
-    }
-    public function setForm( $form){
-        $form->add(array(
-                'name' => 'id',
-                'type' => 'hidden',
-                'filters'  => array(
-                    array('name'=>'Int'),
-                )
-            )
-        );
-        $form->add(array(
-                'name' => 'username',
-                'type' => 'text',
-                'options' => array(
-                    'label' => 'Kullanıcı Adı',
-                ),
-            )
-        );
-        $form->add(array(
-                'name' => 'name',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Ad',
-                ),
-            )
-        );
-        $form->add(array(
-                'name' => 'surname',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'SoyAd',
-                ),
-            )
-        );
-        $form->add(array(
-                'name' => 'email',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Email',
-                ),
-            )
-        );
-        $form->add(array(
-                'name' => 'submit',
-                'type' => 'Submit',
-                'attributes' => array(
-                    'value' => 'Go',
-                    'id' => 'submitbutton',
-                ),
-            )
-        );
     }
     /**
      * @return array|object
