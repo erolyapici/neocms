@@ -19,7 +19,6 @@
 if (file_exists('vendor/autoload.php')) {
     $loader = include 'vendor/autoload.php';
 }
-require_once 'vendor/NeoForm.php';
 require_once 'vendor/NeoAjax.php';
 $zf2Path = false;
 
