@@ -9,11 +9,11 @@
 
 namespace Admin\Controller;
 
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Db\Sql\Predicate\In;
 use Zend\Db\Sql\Select;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Paginator\Adapter\Iterator;
 use Zend\Paginator\Paginator;
+use Zend\Paginator\Adapter\Iterator;
 use Zend\View\Model\ViewModel;
 use NeoAjax;
 use Zend\View\Renderer\PhpRenderer;
@@ -21,10 +21,8 @@ use Zend\View\Resolver;
 use Zend\Json\Json;
 use Admin\Model\Entity\User;
 
-
 class UsersController extends AbstractActionController{
     protected $table;
-    protected $inputFilter;
 
     /**
      * @return array|ViewModel

@@ -59,7 +59,7 @@ class NeoAjax {
      * @param $selector
      */
     public function showModal($selector){
-        $this->js.="$('$selector').modal('show');";
+        $this->js.="$('$selector').modal('show');$('$selector').on('show', function () { $(this).find('.modal-body').css({width:'auto',height:'auto','max-height':'100%'}); });";
     }
     /**
      * Run script

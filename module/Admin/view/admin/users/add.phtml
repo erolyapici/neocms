@@ -6,29 +6,35 @@
         <div id="div-1" class="accordion-body collapse in body">
             <form class="form-horizontal" id="popUpFormu">
                 <div class="control-group">
-                    <label for="text1" class="control-label">Kullanıcı Adı</label>
-
+                    <label for="username" class="control-label">Kullanıcı Adı</label>
                     <div class="controls with-tooltip">
-                        <input type="text" name="username" id="username" class="span6 input-tooltip" data-original-title="Kullanıcı Adı" data-placement="bottom"/>
-                        <span id="username_error"></span>
+                        <input type="text" name="username" id="username" class="span3 input-tooltip" data-original-title="Kullanıcı Adı" data-placement="bottom"/>
+                        <div class="clearfix"></div>
+                        <span id="username_error" class="error"></span>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label for="pass1" class="control-label">Ad Soyad</label>
-
+                    <label for="name" class="control-label">Ad</label>
                     <div class="controls with-tooltip">
                         <input type="text" name="name" id="name" class="span3 input-tooltip" data-original-title="Ad" data-placement="bottom"/>
-                        <input type="text" name="surname" id="surname" class="span3 input-tooltip" data-original-title="Ad" data-placement="bottom"/>
-                        <span id="name_error"></span>
-                        <span id="surname_error"></span>
+                        <div class="clearfix"></div>
+                        <span id="name_error" class="error"></span>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label for="text1" class="control-label">Email</label>
-
+                    <label for="surname" class="control-label">Soyad</label>
                     <div class="controls with-tooltip">
-                        <input type="text" name="email" id="email" class="span6 input-tooltip" data-original-title="Email" data-placement="bottom"/>
-                        <span id="email_error"></span>
+                        <input type="text" name="surname" id="surname" class="span3 input-tooltip" data-original-title="Ad" data-placement="bottom"/>
+                        <div class="clearfix"></div>
+                        <span id="surname_error" class="error"></span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="email" class="control-label">Email</label>
+                    <div class="controls with-tooltip">
+                        <input type="text" name="email" id="email" class="span3 input-tooltip" data-original-title="Email" data-placement="bottom"/>
+                        <div class="clearfix"></div>
+                        <span id="email_error" class="error"></span>
                     </div>
                 </div>
             </form>
