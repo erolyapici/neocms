@@ -115,9 +115,7 @@ class UsersController extends AbstractActionController{
                     $inputFilter->setData($post);
 
                     if($inputFilter->isValid()){
-
-                        $entity = new User($inputFilter->getRawValues());
-                        $this->getTable()->save($entity);
+                        $this->getTable()->saveArray($inputFilter->getRawValues());
                         $neoAjax->alert('İşlem başarılı şekilde gerçekleşti!');
                         $neoAjax->reload();
                     }else{
@@ -176,11 +174,11 @@ class UsersController extends AbstractActionController{
 
                 if($inputFilter->isValid()){
 
-                    $entity = new User($inputFilter->getRawValues());
-                    $entity->setState(1);
-                    $entity->setGrup_id(1);
-                    $entity->setPassword(md5("123456"));
-                    $this->getTable()->save($entity);
+                    $array = $inputFilter->getRawValues();
+                    $array['state']     = 1;
+                    $array['grup_id']   = 1;
+                    $array['password']  = md5("123456");
+                    $this->getTable()->saveArray($array);
                     $neoAjax->alert('İşlem başarılı şekilde gerçekleşti!');
                     $neoAjax->reload();
                 }else{
@@ -203,9 +201,7 @@ class UsersController extends AbstractActionController{
     public function getTable(){
         if(!$this->table){
             $sm = $this->getServiceLocator();
-
             $this->table = $sm->get('User\Model\UserTable');
-
         }
         return $this->table;
     }

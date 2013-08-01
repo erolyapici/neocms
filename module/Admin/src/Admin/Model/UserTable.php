@@ -59,7 +59,26 @@ class UserTable extends AbstractTableGateway{
         $data = new Entity\User($row);
         return $data;
     }
-
+    public function saveArray(array$array){
+        $id = FALSE;
+        if(isset($array['id'])){
+            $id = (int)$array['id'];
+            unset($array['id']);
+        }
+        if($id == 0){
+            if(!$this->insert($array)){
+                return FALSE;
+            }else{
+                return $this->getLastInsertValue();
+            }
+        }elseif($this->get($id)){
+            if(!$this->update($array,array('id'=>$id))){
+                return FALSE;
+            }
+            return $id;
+        }
+        return FALSE;
+    }
     /**
      * @param Entity\User $object
      * @return bool|int
