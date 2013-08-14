@@ -184,6 +184,11 @@
                 <i class="icon-user icon-large"></i><?php echo $this->translate('Kullanıcılar') ?><span class="label label-inverse pull-right"></span>
             </a>
         </li>
+        <li>
+            <a data-parent="#menu" href="<?php echo $this->url('usergroup',array('action'=>'index'));?>" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
+                <i class="icon-user icon-large"></i><?php echo $this->translate('Kullanı Grupları') ?><span class="label label-inverse pull-right"></span>
+            </a>
+        </li>
         <li class="accordion-group ">
             <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
                 <i class="icon-pencil icon-large"></i> Forms <span class="label label-inverse pull-right">4</span>

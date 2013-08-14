@@ -11,6 +11,7 @@ namespace Admin;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Admin\Model\UserTable;
+use Admin\Model\UserGroupTable;
 
 class Module{
     public function onBootstrap(MvcEvent $e)
@@ -41,6 +42,11 @@ class Module{
                 'User/Model/UserTable'    => function($sm){
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new UserTable($dbAdapter);
+                    return $table;
+                },
+                'User/Model/UserGroupTable'    => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new UserGroupTable($dbAdapter);
                     return $table;
                 }
             )

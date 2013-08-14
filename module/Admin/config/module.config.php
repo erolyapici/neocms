@@ -10,10 +10,12 @@
 return array(
     'controllers'   => array(
         'invokables'    => array(
-            'Admin\Controller\Login'    => 'Admin\Controller\LoginController',
+            'Admin\Controller\Login'        => 'Admin\Controller\LoginController',
             'Admin\Controller\Dashboard'    => 'Admin\Controller\DashboardController',
-            'Admin\Controller\Users'    => 'Admin\Controller\UsersController',
-            'Admin\Model\UserTable'     => 'Admin\Model\UserTable'
+            'Admin\Controller\Users'        => 'Admin\Controller\UsersController',
+            'Admin\Controller\UserGroup'    => 'Admin\Controller\UserGroupController',
+            'Admin\Model\UserTable'         => 'Admin\Model\UserTable',
+            'Admin\Model\UserGroupTable'    => 'Admin\Model\UserGroupTable'
         ),
     ),
     'router'    => array(
@@ -69,6 +71,25 @@ return array(
                         'page'          => 1,
                         '__NAMESPACE__' => 'Admin\Controller',
                         'controller'    => 'Users',
+                        'action'        => 'index',
+                    )
+                ),
+            ),
+            'usergroup' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route'    => '/admin/usergroup[/:action][/:id][/page/:page][/order_by/:order_by][/:order]',
+                    'constraints' => array(
+                        'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                        'page' => '[0-9]+',
+                        'order_by' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'order' => 'ASC|DESC',
+                    ),
+                    'defaults'  => array(
+                        'page'          => 1,
+                        '__NAMESPACE__' => 'Admin\Controller',
+                        'controller'    => 'UserGroup',
                         'action'        => 'index',
                     )
                 ),

@@ -2,10 +2,11 @@
 /**
  * Created by JetBrains PhpStorm.
  * User: eyapici
- * Date: 08.07.2013
- * Time: 14:38
+ * Date: 14/08/13
+ * Time: 21:10
  * To change this template use File | Settings | File Templates.
  */
+
 namespace Admin\Model;
 
 use Zend\Db\Adapter\Adapter;
@@ -13,18 +14,14 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Select;
 use Zend\InputFilter\Factory;
 
-class UserTable extends AbstractTableGateway{
-    protected $table = 'users';
+class UserGroupTable  extends AbstractTableGateway{
+    protected $table = 'user_group';
     protected $inputFilter;
 
     public function __construct(Adapter $adapter){
         $this->adapter = $adapter;
     }
 
-    /**
-     * @param Select $select
-     * @return array
-     */
     public function fetchAll(Select $select = null){
         if($select == null){
             $select = new Select();
@@ -33,21 +30,15 @@ class UserTable extends AbstractTableGateway{
         $resultSet = $this->selectWith($select);
         $entities = array();
         foreach($resultSet AS $row){
-            $entity = new Entity\User();
+            $entity = new Entity\UserGroup();
             $entity->setId($row->id);
-            $entity->setUsername($row->username);
-            $entity->setPassword($row->password);
             $entity->setName($row->name);
-            $entity->setSurname($row->surname);
-            $entity->setEmail($row->email);
-            $entity->setGrup_id($row->grup_id);
             $entity->setState($row->state);
 
             $entities[] = $entity;
         }
         return $entities;
     }
-
     /**
      * @param $id
      * @return Entity\User|bool
@@ -56,7 +47,7 @@ class UserTable extends AbstractTableGateway{
         $row = $this->select(array('id'=>(int)$id))->current();
         if(!$row)
             return FALSE;
-        $data = new Entity\User($row);
+        $data = new Entity\UserGroup($row);
         return $data;
     }
     public function saveArray(array$array){
@@ -83,13 +74,9 @@ class UserTable extends AbstractTableGateway{
      * @param Entity\User $object
      * @return bool|int
      */
-    public function save(Entity\User $object){
+    public function save(Entity\UserGroup $object){
         $data = array(
-            'username'  =>$object->getUsername(),
             'name'      =>$object->getName(),
-            'surname'   =>$object->getSurname(),
-            'email'     =>$object->getEmail(),
-            'grup_id'   =>$object->getGrup_id(),
             'state'     =>$object->getState(),
         );
 
@@ -117,7 +104,6 @@ class UserTable extends AbstractTableGateway{
         $resultSet->buffer();
         return $resultSet;
     }
-
     /**
      * @return \Zend\InputFilter\InputFilterInterface
      */
@@ -130,15 +116,7 @@ class UserTable extends AbstractTableGateway{
                         'name'      =>'id',
                         'required'  =>false,
 
-                        'validators'=>array(
-                            array(
-                                'name'  => 'int',
-                                'options'=>array(
-                                    'min'       => 3,
-                                    'max'       =>100,
-                                )
-                            )
-                        )
+
                     ),
                     'name' => array(
                         'name'      =>'name',
@@ -158,60 +136,6 @@ class UserTable extends AbstractTableGateway{
                             )
                         )
                     ),
-                    'surname' => array(
-                        'name'      =>'surname',
-                        'required'  =>true,
-                        'filters'   =>array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators'=>array(
-                            array(
-                                'name'  => 'StringLength',
-                                'options'=>array(
-                                    'encoding'  => 'UTF-8',
-                                    'min'       => 3,
-                                    'max'       =>100,
-                                )
-                            )
-                        )
-                    ),
-                    'username' => array(
-                        'name'      =>'username',
-                        'required'  =>true,
-                        'filters'   =>array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators'=>array(
-                            array(
-                                'name'  => 'StringLength',
-                                'options'=>array(
-                                    'encoding'  => 'UTF-8',
-                                    'min'       => 3,
-                                    'max'       =>100,
-                                )
-                            )
-                        )
-                    ),
-                    'email' => array(
-                        'name'      =>'email',
-                        'required'  =>true,
-                        'filters'   =>array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators'=>array(
-                            array(
-                                'name'  => 'StringLength',
-                                'options'=>array(
-                                    'encoding'  => 'UTF-8',
-                                    'min'       => 3,
-                                    'max'       =>100,
-                                )
-                            )
-                        )
-                    )
                 )
             );
 
