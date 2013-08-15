@@ -32,6 +32,18 @@
                     <span id="email_error"></span>
                 </div>
             </div>
+            <div class="control-group">
+                <label for="state" class="control-label">Durum</label>
+
+                <div class="controls with-tooltip">
+                    <select name="state">
+                        <option value="-1"></option>
+                        <option value="1" <?php if ($data->state == 1){ ?> selected="selected" <?php } ?>>Aktif</option>
+                        <option value="0" <?php if ($data->state == 0){ ?> selected="selected" <?php } ?>>Pasif</option>
+                    </select>
+                    <span id="state_error"></span>
+                </div>
+            </div>
         </form>
     </div>
 </div>

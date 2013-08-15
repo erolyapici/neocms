@@ -115,8 +115,9 @@ class UserGroupTable  extends AbstractTableGateway{
                     'id' => array(
                         'name'      =>'id',
                         'required'  =>false,
-
-
+                        'filters'  => array(
+                            array('name'=>'Int'),
+                        )
                     ),
                     'name' => array(
                         'name'      =>'name',
@@ -135,6 +136,18 @@ class UserGroupTable  extends AbstractTableGateway{
                                 )
                             )
                         )
+                    ),
+                    'state' => array(
+                        'name'      =>'state',
+                        'required'  =>true,
+                        'filters'  => array(
+                            array('name'=>'Int'),
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'not_empty',
+                            )
+                        ),
                     ),
                 )
             );

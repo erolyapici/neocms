@@ -2,8 +2,8 @@
 /**
  * Created by JetBrains PhpStorm.
  * User: eyapici
- * Date: 14/08/13
- * Time: 21:00
+ * Date: 15/08/13
+ * Time: 21:42
  * To change this template use File | Settings | File Templates.
  */
 
@@ -20,13 +20,13 @@ use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Resolver;
 use Zend\Json\Json;
 
-class UserGroupController extends AbstractActionController{
+class BlogCategoriesController extends AbstractActionController{
     protected $table;
 
     public function indexAction(){
-        $select     = new Select();
-        $request    = $this->getRequest();
-        $post       = $request->getPost();
+        $select = new Select();
+        $request = $this->getRequest();
+        $post = $request->getPost();
         $name       = $post->get('name');
         $state      = (int)$post->get('state',-1);
 
@@ -36,33 +36,36 @@ class UserGroupController extends AbstractActionController{
         if(!empty($name)){
             $select->where->like("name","%$name%");
         }
+
         $data = $this->getTable()->fetchList($select->order($order_by.' '.$order));
 
         $itemsPerPage = 20;
 
         $paginator = new Paginator(new Iterator($data));
         $paginator
-                ->setCurrentPageNumber($page)
-                ->setItemCountPerPage($itemsPerPage)
-                ->setPageRange(7);
+            ->setCurrentPageNumber($page)
+            ->setItemCountPerPage($itemsPerPage)
+            ->setPageRange(7);
         return new ViewModel(array(
             'order_by'=>$order_by,
             'order'=>$order,
             'page'=>$page,
             'paginator' =>$paginator
         ));
+
     }
 
     public function addAction(){
         $neoAjax = new neoAjax();
-        $request = $this->getRequest();
-        $post = $request->getPost();
-        $name = $post->get('name',false);
+        $request    = $this->getRequest();
+        $post       = $request->getPost();
+
+        $name   = $post->get('name',false);
         if($name === FALSE){
             $renderer = new PhpRenderer();
             $resolver = new Resolver\TemplateMapResolver();
             $resolver->setMap(array(
-                'add' => __DIR__ . '../../../../view/admin/user-group/add.phtml'
+                'add' => __DIR__ . '../../../../view/admin/blog-categories/add.phtml'
             ));
 
             $renderer->setResolver($resolver);
@@ -71,30 +74,35 @@ class UserGroupController extends AbstractActionController{
             $viewModel = new ViewModel();
             $viewModel->setTemplate('add')
                 ->setVariables(array(
-                    'save_url'  => $this->url()->fromRoute('usergroup', array('action'=>'add')),
+                    'save_url'  => $this->url()->fromRoute('blogcategories', array('action'=>'add')),
                 ));
 
             $html = $neoAjax->strip($renderer->render($viewModel));
             $neoAjax->html('#myModal',$html);
             $neoAjax->showModal('#myModal');
-        }elseif($request->isPost()){
-            $inputFilter = $this->getTable()->setInputFilter();
-            $inputFilter->setData($post);
+        }else{
+            if($request->isPost()){
 
-            if($inputFilter->isValid()){
-                $array = $inputFilter->getRawValues();
-                $this->table->saveArray($array);
-                $neoAjax->alert('İşlem başarılı şekilde gerçekleşti!');
-                $neoAjax->reload();
-            }else{
-                $messages = $inputFilter->getMessages();
-                if(!empty($messages)){
-                    foreach($messages AS $key=>$message){
-                        $neoAjax->html('#'.$key.'_error',$neoAjax->strip(implode(" ",$message)));
+                $inputFilter = $this->getTable()->setInputFilter();
+                $inputFilter->setData($post);
+
+                if($inputFilter->isValid()){
+
+                    $array = $inputFilter->getRawValues();
+                    $this->getTable()->saveArray($array);
+                    $neoAjax->alert('İşlem başarılı şekilde gerçekleşti!');
+                    $neoAjax->reload();
+                }else{
+                    $messages = $inputFilter->getMessages();
+                    if(!empty($messages)){
+                        foreach($messages AS $key=>$message){
+                            $neoAjax->html('#'.$key.'_error',$neoAjax->strip(implode(" ",$message)));
+                        }
                     }
                 }
             }
         }
+
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode($neoAjax->getResult()));
         return $response;
@@ -112,10 +120,11 @@ class UserGroupController extends AbstractActionController{
 
             if(empty($post_id)){
                 $data = $this->getTable()->get($id);
+
                 $renderer = new PhpRenderer();
                 $resolver = new Resolver\TemplateMapResolver();
                 $resolver->setMap(array(
-                    'edit'=>__DIR__ . '../../../../view/admin/user-group/edit.phtml'
+                    'edit'=>__DIR__ . '../../../../view/admin/blog-categories/edit.phtml'
                 ));
                 $renderer->setResolver($resolver);
 
@@ -123,7 +132,7 @@ class UserGroupController extends AbstractActionController{
                 $viewModel->setTemplate('edit')
                     ->setVariables(array(
                         'data'=>$data,
-                        'save_url' => $this->url()->fromRoute('usergroup', array('action'=>'edit','id'=>$id)),
+                        'save_url' => $this->url()->fromRoute('blogcategories', array('action'=>'edit','id'=>$id)),
                     ));
                 $html = $neoAjax->strip($renderer->render($viewModel));
                 $neoAjax->html('#myModal',$html);
@@ -148,20 +157,16 @@ class UserGroupController extends AbstractActionController{
                     }
                 }
             }
-
-
-        }else{
-            $neoAjax->alert('Kayıt bulunamadı!');
         }
+
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode($neoAjax->getResult()));
         return $response;
     }
-
     public function getTable(){
         if(!$this->table){
             $sm = $this->getServiceLocator();
-            $this->table = $sm->get('User\Model\UserGroupTable');
+            $this->table = $sm->get('User\Model\BlogCategoriesTable');
         }
         return $this->table;
     }

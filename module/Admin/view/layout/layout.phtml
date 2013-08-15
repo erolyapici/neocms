@@ -191,10 +191,10 @@
         </li>
         <li class="accordion-group ">
             <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
-                <i class="icon-pencil icon-large"></i> Forms <span class="label label-inverse pull-right">4</span>
+                <i class="icon-pencil icon-large"></i> Blog <span class="label label-inverse pull-right">4</span>
             </a>
             <ul class="collapse " id="form-nav">
-                <li><a href="form-general.html"><i class="icon-angle-right"></i> General</a></li>
+                <li><a href="<?php echo $this->url('blogcategories',array('action'=>'index'));?>"><i class="icon-angle-right"></i> Kategoriler</a></li>
                 <li><a href="form-validation.html"><i class="icon-angle-right"></i> Validation</a></li>
                 <li><a href="form-wysiwyg.html"><i class="icon-angle-right"></i> WYSIWYG</a></li>
                 <li><a href="form-wizard.html"><i class="icon-angle-right"></i> Wizard &amp; File Upload</a></li>

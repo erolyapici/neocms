@@ -12,6 +12,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Admin\Model\UserTable;
 use Admin\Model\UserGroupTable;
+use Admin\Model\BlogCategoriesTable;
 
 class Module{
     public function onBootstrap(MvcEvent $e)
@@ -47,6 +48,11 @@ class Module{
                 'User/Model/UserGroupTable'    => function($sm){
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new UserGroupTable($dbAdapter);
+                    return $table;
+                },
+                'User/Model/BlogCategoriesTable'    => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new BlogCategoriesTable($dbAdapter);
                     return $table;
                 }
             )
