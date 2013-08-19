@@ -2,8 +2,8 @@
 /**
  * Created by JetBrains PhpStorm.
  * User: eyapici
- * Date: 14/08/13
- * Time: 21:10
+ * Date: 19/08/13
+ * Time: 20:48
  * To change this template use File | Settings | File Templates.
  */
 
@@ -14,28 +14,14 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Select;
 use Zend\InputFilter\Factory;
 
-class UserGroupTable  extends AbstractTableGateway{
-    protected $table = 'user_group';
+class TagTable extends AbstractTableGateway{
+    protected $table = 'tags';
     protected $inputFilter;
 
     public function __construct(Adapter $adapter){
         $this->adapter = $adapter;
     }
 
-    /**
-     * get Combo
-     * @return array
-     */
-    public function getCombo(){
-        $data = array();
-        $select = new Select();
-        $select->from($this->table);
-        $resultSet = $this->selectWith($select);
-        foreach($resultSet AS $row){
-            $data[$row->id] = $row->name;
-        }
-        return $data;
-    }
     /**
      * @param Select $select
      * @return array
@@ -48,12 +34,9 @@ class UserGroupTable  extends AbstractTableGateway{
         $resultSet = $this->selectWith($select);
         $entities = array();
         foreach($resultSet AS $row){
-            $entity = new Entity\UserGroup();
-            $entity->setId($row->id);
+            $entity = new Entity\Tag();
             $entity->setName($row->name);
             $entity->setState($row->state);
-
-            $entities[] = $entity;
         }
         return $entities;
     }
@@ -119,7 +102,6 @@ class UserGroupTable  extends AbstractTableGateway{
         }
         return FALSE;
     }
-
     /**
      * @param Select $select
      * @return mixed
@@ -152,7 +134,6 @@ class UserGroupTable  extends AbstractTableGateway{
                                 'name' => 'Between',
                                 'options' => array(
                                     'min' => 1,
-                                    'max' => 1000,
                                 ),
                             ),
                         ),
@@ -170,7 +151,7 @@ class UserGroupTable  extends AbstractTableGateway{
                                 'options'=>array(
                                     'encoding'  => 'UTF-8',
                                     'min'       => 3,
-                                    'max'       =>100,
+                                    'max'       =>50,
                                 )
                             )
                         )

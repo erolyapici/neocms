@@ -13,6 +13,7 @@ use Zend\Mvc\MvcEvent;
 use Admin\Model\UserTable;
 use Admin\Model\UserGroupTable;
 use Admin\Model\BlogCategoriesTable;
+use Admin\Model\TagTable;
 
 class Module{
     public function onBootstrap(MvcEvent $e)
@@ -54,7 +55,12 @@ class Module{
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new BlogCategoriesTable($dbAdapter);
                     return $table;
-                }
+                },
+                'User/Model/TagTable'    => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new TagTable($dbAdapter);
+                    return $table;
+                },
             )
         );
     }

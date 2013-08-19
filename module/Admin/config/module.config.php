@@ -15,9 +15,11 @@ return array(
             'Admin\Controller\Users'        => 'Admin\Controller\UsersController',
             'Admin\Controller\UserGroup'    => 'Admin\Controller\UserGroupController',
             'Admin\Controller\BlogCategories'    => 'Admin\Controller\BlogCategoriesController',
+            'Admin\Controller\Tag'    => 'Admin\Controller\TagController',
             'Admin\Model\UserTable'         => 'Admin\Model\UserTable',
             'Admin\Model\UserGroupTable'    => 'Admin\Model\UserGroupTable',
-            'Admin\Model\BlogCategoriesTable'    => 'Admin\Model\BlogCategoriesTable'
+            'Admin\Model\BlogCategoriesTable'    => 'Admin\Model\BlogCategoriesTable',
+            'Admin\Model\TagTable'    => 'Admin\Model\TagTable',
         ),
     ),
     'router'    => array(
@@ -111,6 +113,25 @@ return array(
                         'page'          => 1,
                         '__NAMESPACE__' => 'Admin\Controller',
                         'controller'    => 'BlogCategories',
+                        'action'        => 'index',
+                    )
+                ),
+            ),
+            'tag' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route'    => '/tag/blogcategories[/:action][/:id][/page/:page][/order_by/:order_by][/:order]',
+                    'constraints' => array(
+                        'action' => '(?!\bpage\b)(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                        'page' => '[0-9]+',
+                        'order_by' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'order' => 'ASC|DESC',
+                    ),
+                    'defaults'  => array(
+                        'page'          => 1,
+                        '__NAMESPACE__' => 'Admin\Controller',
+                        'controller'    => 'Tag',
                         'action'        => 'index',
                     )
                 ),

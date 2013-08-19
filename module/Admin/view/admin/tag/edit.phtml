@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+    <h3 id="myModalLabel">Kategori Düzeltme Formu</h3>
+</div>
+<div class="modal-body">
+    <div id="div-1" class="accordion-body collapse in body">
+        <form class="form-horizontal" id="popUpFormu">
+            <input type="hidden" name="id" value="<?php echo $data->id;?>"/>
+            <div class="control-group">
+                <label for="name" class="control-label">Ad</label>
+
+                <div class="controls with-tooltip">
+                    <input type="text" name="name" id="name" class="span3 input-tooltip" data-original-title="Ad" data-placement="bottom" value="<?php echo $data->name;?>"//>
+                    <span id="name_error"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="state" class="control-label">Durum</label>
+
+                <div class="controls with-tooltip">
+                    <select name="state">
+                        <option value=""></option>
+                        <option value="1" <?php if ($data->state == 1){ ?> selected="selected" <?php } ?>>Aktif</option>
+                        <option value="0" <?php if ($data->state == 0){ ?> selected="selected" <?php } ?>>Pasif</option>
+                    </select>
+                    <span id="state_error"></span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button data-dismiss="modal" class="btn">Kapat</button>
+    <button class="btn btn-primary" onclick="neoajax('<?php echo $save_url;?>',getFormValues('popUpFormu'))">Kaydet</button>
+</div>
