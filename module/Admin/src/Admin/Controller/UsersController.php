@@ -20,6 +20,7 @@ use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Resolver;
 use Zend\Json\Json;
 use Admin\Model\Entity\User;
+use Admin\Model\UserGroupTable;
 
 class UsersController extends AbstractActionController{
     protected $table;
@@ -90,6 +91,8 @@ class UsersController extends AbstractActionController{
             $post_id    = $post->get('id');
 
             if(empty($post_id)){
+                $sm = $this->getServiceLocator();
+                $userGroupTable= $sm->get('User\Model\UserGroupTable');
 
                 $data = $this->getTable()->get($id);
                 $renderer = new PhpRenderer();
@@ -104,6 +107,7 @@ class UsersController extends AbstractActionController{
                     ->setVariables(array(
                         'data'=>$data,
                         'save_url' => $this->url()->fromRoute('users', array('action'=>'edit','id'=>$id)),
+                        'userGroupCombo'=> $userGroupTable->getCombo()
                     ));
                 $html = $neoAjax->strip($renderer->render($viewModel));
                 $neoAjax->html('#myModal',$html);
@@ -148,6 +152,9 @@ class UsersController extends AbstractActionController{
         $username   = $post->get('username',false);
 
         if($username === FALSE){
+            $sm = $this->getServiceLocator();
+            $userGroupTable= $sm->get('User\Model\UserGroupTable');
+
             $renderer = new PhpRenderer();
             $resolver = new Resolver\TemplateMapResolver();
             $resolver->setMap(array(
@@ -159,8 +166,10 @@ class UsersController extends AbstractActionController{
             $viewModel = new ViewModel();
             $viewModel->setTemplate('add')
                 ->setVariables(array(
-                    'save_url'  => $this->url()->fromRoute('users', array('action'=>'add')),
-                ));
+                        'save_url'  => $this->url()->fromRoute('users', array('action'=>'add')),
+                        'userGroupCombo'=> $userGroupTable->getCombo()
+                    )
+                );
 
             $html = $neoAjax->strip($renderer->render($viewModel));
             $neoAjax->html('#myModal',$html);
@@ -175,8 +184,6 @@ class UsersController extends AbstractActionController{
                 if($inputFilter->isValid()){
 
                     $array = $inputFilter->getRawValues();
-                    $array['state']     = 1;
-                    $array['grup_id']   = 1;
                     $array['password']  = md5("123456");
                     $this->getTable()->saveArray($array);
                     $neoAjax->alert('İşlem başarılı şekilde gerçekleşti!');

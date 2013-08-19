@@ -33,6 +33,21 @@
                 </div>
             </div>
             <div class="control-group">
+                <label for="grup_id" class="control-label">Grup</label>
+
+                <div class="controls with-tooltip">
+                    <select name="grup_id">
+                        <option value="-1"></option>
+                        <?php
+                        foreach($userGroupCombo AS $group_id=>$user_group_ad){ ?>
+                            <option value="<?php echo $group_id;?>" <?php if ($data->grup_id == $group_id){ ?> selected="selected" <?php } ?>><?php echo $user_group_ad;?></option>
+                        <?php } ?>
+
+                    </select>
+                    <span id="grup_id_error"></span>
+                </div>
+            </div>
+            <div class="control-group">
                 <label for="state" class="control-label">Durum</label>
 
                 <div class="controls with-tooltip">

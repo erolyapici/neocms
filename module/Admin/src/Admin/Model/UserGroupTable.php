@@ -22,6 +22,24 @@ class UserGroupTable  extends AbstractTableGateway{
         $this->adapter = $adapter;
     }
 
+    /**
+     * get Combo
+     * @return array
+     */
+    public function getCombo(){
+        $data = array();
+        $select = new Select();
+        $select->from($this->table);
+        $resultSet = $this->selectWith($select);
+        foreach($resultSet AS $row){
+            $data[$row->id] = $row->name;
+        }
+        return $data;
+    }
+    /**
+     * @param Select $select
+     * @return array
+     */
     public function fetchAll(Select $select = null){
         if($select == null){
             $select = new Select();
@@ -50,6 +68,11 @@ class UserGroupTable  extends AbstractTableGateway{
         $data = new Entity\UserGroup($row);
         return $data;
     }
+
+    /**
+     * @param array $array
+     * @return bool|int
+     */
     public function saveArray(array$array){
         $id = FALSE;
         if(isset($array['id'])){
@@ -95,6 +118,11 @@ class UserGroupTable  extends AbstractTableGateway{
         }
         return FALSE;
     }
+
+    /**
+     * @param Select $select
+     * @return mixed
+     */
     public function fetchList(Select $select = null){
         if (null === $select)
             $select = new Select();

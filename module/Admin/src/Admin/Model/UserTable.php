@@ -129,16 +129,50 @@ class UserTable extends AbstractTableGateway{
                     'id' => array(
                         'name'      =>'id',
                         'required'  =>false,
-
-                        'validators'=>array(
+                        'filters'  => array(
+                            array('name' => 'Int'),
+                        ),
+                        'validators' => array(
                             array(
-                                'name'  => 'int',
-                                'options'=>array(
-                                    'min'       => 3,
-                                    'max'       =>100,
-                                )
-                            )
-                        )
+                                'name' => 'Between',
+                                'options' => array(
+                                    'min' => 1,
+                                    'max' => 1000,
+                                ),
+                            ),
+                        ),
+                    ),
+                    'grup_id' => array(
+                        'name'      =>'id',
+                        'required'  =>true,
+                        'filters'  => array(
+                            array('name' => 'Int'),
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'Between',
+                                'options' => array(
+                                    'min' => 1,
+                                    'max' => 1000,
+                                ),
+                            ),
+                        ),
+                    ),
+                    'state' => array(
+                        'name'      =>'state',
+                        'required'  =>true,
+                        'filters'  => array(
+                            array('name' => 'Int'),
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'Between',
+                                'options' => array(
+                                    'min' => 1,
+                                    'max' => 1000,
+                                ),
+                            ),
+                        ),
                     ),
                     'name' => array(
                         'name'      =>'name',
