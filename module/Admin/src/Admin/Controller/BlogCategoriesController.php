@@ -80,6 +80,7 @@ class BlogCategoriesController extends AbstractActionController{
             $html = $neoAjax->strip($renderer->render($viewModel));
             $neoAjax->html('#myModal',$html);
             $neoAjax->showModal('#myModal');
+            $neoAjax->script("var editor = CKEDITOR.replace( $('.ckeditor').attr('id') );editor.setData( '<p>Just click the <b>Image</b> or <b>Link</b> button, and then <b>&quot;Browse Server&quot;</b>.</p>' );CKFinder.setupCKEditor( editor, BASE_PATH+'/js/ckfinder' ) ;");
         }else{
             if($request->isPost()){
 

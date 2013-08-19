@@ -133,12 +133,19 @@ class BlogCategoriesTable extends AbstractTableGateway{
         $inputFilter = $factory->createInputFilter(
             array(
                 'id' => array(
-                    'name'  => 'id',
-                    'required'  => FALSE,
-                    'filters'    =>array(
+                    'name'      =>'id',
+                    'required'  =>false,
+                    'filters'  => array(
+                        array('name' => 'Int'),
+                    ),
+                    'validators' => array(
                         array(
-                            'name'  => 'int'
-                        )
+                            'name' => 'Between',
+                            'options' => array(
+                                'min' => 1,
+                                'max' => 1000,
+                            ),
+                        ),
                     ),
                 ),
                 'name' => array(
@@ -181,12 +188,16 @@ class BlogCategoriesTable extends AbstractTableGateway{
                     'name'      =>'state',
                     'required'  =>true,
                     'filters'  => array(
-                        array('name'=>'Int'),
+                        array('name' => 'Int'),
                     ),
                     'validators' => array(
                         array(
-                            'name' => 'not_empty',
-                        )
+                            'name' => 'Between',
+                            'options' => array(
+                                'min' => 1,
+                                'max' => 1000,
+                            ),
+                        ),
                     ),
                 ),
             )
