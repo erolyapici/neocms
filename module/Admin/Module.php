@@ -14,6 +14,7 @@ use Admin\Model\UserTable;
 use Admin\Model\UserGroupTable;
 use Admin\Model\BlogCategoriesTable;
 use Admin\Model\TagTable;
+use Admin\Model\BlogTable;
 
 class Module{
     public function onBootstrap(MvcEvent $e)
@@ -41,17 +42,17 @@ class Module{
     public function getServiceConfig(){
         return array(
             'factories' => array(
-                'User/Model/UserTable'    => function($sm){
+                'Admin/Model/UserTable'    => function($sm){
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new UserTable($dbAdapter);
                     return $table;
                 },
-                'User/Model/UserGroupTable'    => function($sm){
+                'Admin/Model/UserGroupTable'    => function($sm){
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new UserGroupTable($dbAdapter);
                     return $table;
                 },
-                'User/Model/BlogCategoriesTable'    => function($sm){
+                'Admin/Model/BlogCategoriesTable'    => function($sm){
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new BlogCategoriesTable($dbAdapter);
                     return $table;
@@ -61,6 +62,11 @@ class Module{
                     $table = new TagTable($dbAdapter);
                     return $table;
                 },
+                'Admin/Model/BlogTable' => function($sm){
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new BlogTable($dbAdapter);
+                    return $table;
+                }
             )
         );
     }

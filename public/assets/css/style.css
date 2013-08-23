@@ -1176,5 +1176,16 @@ body.fixed .pattern-switcher {
 .comments .popover .arrow {
   top: 33%;
 }
+.form-horizontal .control-label{
+    width: 60px !important;
+}
+.form-horizontal .controls{
+    margin-left: 65px;
+}
+.modal{
+    left: 0 !important;
+    width: 100% !important;
+    margin-left:0 !important;;
+}
 /*COMMENTS*/
 /* --------------- END Component Styles -------------------- */

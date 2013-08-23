@@ -161,7 +161,7 @@ class UserGroupController extends AbstractActionController{
     public function getTable(){
         if(!$this->table){
             $sm = $this->getServiceLocator();
-            $this->table = $sm->get('User\Model\UserGroupTable');
+            $this->table = $sm->get('Admin\Model\UserGroupTable');
         }
         return $this->table;
     }

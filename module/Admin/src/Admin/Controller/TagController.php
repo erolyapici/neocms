@@ -161,7 +161,7 @@ class TagController extends AbstractActionController{
     public function getTable(){
         if(!$this->table){
             $sm = $this->getServiceLocator();
-            $this->table = $sm->get('User\Model\TagTable');
+            $this->table = $sm->get('Admin\Model\TagTable');
         }
         return $this->table;
     }

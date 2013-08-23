@@ -2,8 +2,8 @@
 /**
  * Created by JetBrains PhpStorm.
  * User: eyapici
- * Date: 15/08/13
- * Time: 21:18
+ * Date: 22.08.2013
+ * Time: 11:18
  * To change this template use File | Settings | File Templates.
  */
 
@@ -14,9 +14,8 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Select;
 use Zend\InputFilter\Factory;
 
-class BlogCategoriesTable extends AbstractTableGateway{
-    protected $table = 'blog_categories';
-
+class BlogTable extends AbstractTableGateway{
+    protected $table = 'blogs';
     /**
      * @param Adapter $adapter
      */
@@ -32,19 +31,17 @@ class BlogCategoriesTable extends AbstractTableGateway{
         if($select == null){
             $select = new Select();
         }
-
         $select->from($this->table);
         $resultSet = $this->selectWith($select);
+
         $entities = array();
         foreach($resultSet AS $row){
-            $entity = new Entity\BlogCategories();
+            $entity = new Entity\Blog();
             $entity->setId($row->id);
             $entity->setName($row->name);
-            $entity->setDescription($row->description);
+            $entity->setSeo($row->seo);
             $entities[] = $entity;
         }
-
-        return $entities;
     }
 
     /**
@@ -99,11 +96,12 @@ class BlogCategoriesTable extends AbstractTableGateway{
         return FALSE;
     }
     /**
-     * @param Entity\BlogCategories $object
+     * @param Entity\Blog $object
      * @return bool|int
      */
-    public function save(Entity\BlogCategories $object){
+    public function save(Entity\Blog $object){
         $data = array(
+            'seo'  =>$object->getSeo(),
             'name'      =>$object->getName(),
             'description'   =>$object->getDescription(),
             'state'     =>$object->getState(),
@@ -124,6 +122,10 @@ class BlogCategoriesTable extends AbstractTableGateway{
         }
         return FALSE;
     }
+
+    /**
+     * @return mixed
+     */
     public function setInputFilter(){
         $factory = new Factory();
         $inputFilter = $factory->createInputFilter(
@@ -154,6 +156,32 @@ class BlogCategoriesTable extends AbstractTableGateway{
                     'validators'=>array(
                         array(
                             'name'  => 'StringLength',
+                            'options'=>array(
+                                'encoding'  => 'UTF-8',
+                                'min'       => 3,
+                                'max'       =>100,
+                            )
+                        )
+                    )
+                ),
+                'seo' => array(
+                    'name'      =>'seo',
+                    'required'  =>true,
+                    'filters'   =>array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators'=>array(
+                        array(
+                            'name'  => 'StringLength',
+                            'options'=>array(
+                                'encoding'  => 'UTF-8',
+                                'min'       => 3,
+                                'max'       =>100,
+                            )
+                        ),
+                        array(
+                            'name'  => 'alnum',
                             'options'=>array(
                                 'encoding'  => 'UTF-8',
                                 'min'       => 3,

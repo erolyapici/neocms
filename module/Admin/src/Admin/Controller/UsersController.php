@@ -208,7 +208,7 @@ class UsersController extends AbstractActionController{
     public function getTable(){
         if(!$this->table){
             $sm = $this->getServiceLocator();
-            $this->table = $sm->get('User\Model\UserTable');
+            $this->table = $sm->get('Admin\Model\UserTable');
         }
         return $this->table;
     }

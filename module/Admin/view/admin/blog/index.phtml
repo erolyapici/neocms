@@ -4,14 +4,15 @@
         <div class="box">
             <header>
                 <div class="icons"><i class="icon-move"></i></div>
-                <h5>Blog Kategorileri</h5>
-                <button class="btn btn-primary btn-block" onclick="neoajax('<?php echo $this->url('blogcategories',array('action'=>'add'));?>',{ })">Yeni Kategori Ekle</button>
+                <h5>Blog</h5>
+                <button class="btn btn-primary btn-block" onclick="neoajax('<?php echo $this->url('blog',array('action'=>'add'));?>',{ })">Yeni Makale Ekle</button>
             </header>
             <div id="collapse4" class="body">
                 <form action="" method="post">
                     <table id="dataTable" class="table table-bordered table-condensed table-hover table-striped sortableTable">
                         <thead>
                             <tr>
+                                <th>Seo</th>
                                 <th>Ad</th>
                                 <th>Durum</th>
                                 <th>İşlem</th>
@@ -42,6 +43,9 @@
                             foreach($paginator AS $row){?>
                                 <tr>
                                     <td>
+                                        <?php echo $this->escapeHtml($row->seo);?>
+                                    </td>
+                                    <td>
                                         <?php echo $this->escapeHtml($row->name);?>
                                     </td>
                                     <td>
@@ -54,7 +58,7 @@
                                         ?>
                                     </td>
                                     <td>
-                                        <button class="btn edit" type="button" onclick="neoajax('<?php echo $this->url('blogcategories',array('action'=>'edit','id'=>$row->id));?>',{ });"><i class="icon-edit"></i></button>
+                                        <button class="btn edit" type="button" onclick="neoajax('<?php echo $this->url('blog',array('action'=>'edit','id'=>$row->id));?>',{ });"><i class="icon-edit"></i></button>
                                         <button class="btn btn-danger remove"><i class="icon-remove"></i></button>
                                     </td>
                                 </tr>
@@ -64,7 +68,7 @@
                         </tbody>
                     </table>
                     <?php
-                    echo $this->paginationControl($paginator, 'Sliding', 'paginator-slide', array('order_by' => $order_by, 'order' => $order,'controller'=>'usergroup')
+                    echo $this->paginationControl($paginator, 'Sliding', 'paginator-slide', array('order_by' => $order_by, 'order' => $order,'controller'=>'blog')
                     );
                     ?>
                 </form>
