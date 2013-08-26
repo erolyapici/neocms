@@ -42,6 +42,7 @@ class BlogTable extends AbstractTableGateway{
             $entity->setSeo($row->seo);
             $entities[] = $entity;
         }
+        return $entities;
     }
 
     /**
@@ -67,8 +68,7 @@ class BlogTable extends AbstractTableGateway{
         if(!$row){
             return FALSE;
         }
-        $data = new Entity\BlogCategories($row);
-        return $data;
+        return $row;
     }
 
     /**
@@ -179,7 +179,7 @@ class BlogTable extends AbstractTableGateway{
                                 'min'       => 3,
                                 'max'       =>100,
                             )
-                        ),
+                        )/*,
                         array(
                             'name'  => 'alnum',
                             'options'=>array(
@@ -187,26 +187,12 @@ class BlogTable extends AbstractTableGateway{
                                 'min'       => 3,
                                 'max'       =>100,
                             )
-                        )
+                        )*/
                     )
                 ),
                 'description' => array(
                     'name'      =>'description',
                     'required'  =>false,
-                    'filters'   =>array(
-                        array('name' => 'StripTags'),
-                        array('name' => 'StringTrim'),
-                    ),
-                    'validators'=>array(
-                        array(
-                            'name'  => 'StringLength',
-                            'options'=>array(
-                                'encoding'  => 'UTF-8',
-                                'min'       => 3,
-                                'max'       =>255,
-                            )
-                        )
-                    )
                 ),
                 'state' => array(
                     'name'      =>'state',

@@ -2,11 +2,21 @@
  *
  */
 
-function getFormValues(formId){ return $("#"+formId).serialize();}
+function getFormValues(formId){
+
+    $("#"+formId+" :input").each(function(e){
+        if($(this).hasClass('ckeditor')){
+            $(this).val(CKEDITOR.instances[$(this).attr('id')].getData()) ;
+        }
+    });
+    str = $("#"+formId).serialize();
+    return str;
+}
 function neoAjax__A(str){ alert(str);}
 function neoAjax__R(forceGet){ location.reload(forceGet); }
 function neoajax(url,data){
     console.log(data);
+
     $.ajax({
         type:'POST',
         url:url,

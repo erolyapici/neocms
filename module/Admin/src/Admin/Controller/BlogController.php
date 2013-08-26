@@ -45,7 +45,7 @@ class BlogController extends  AbstractActionController{
         if(!empty($name)){
             $select->where->like("name","%$seo%");
         }
-        $select->columns(array('seo','name','state'));
+        $select->columns(array('id','seo','name','state'));
         $data = $this->getTable()->fetchList($select->order($order_by.' '.$order));
 
         $itemsPerPage = 20;
@@ -122,6 +122,68 @@ class BlogController extends  AbstractActionController{
         return $response;
     }
 
+    /**
+     * @return mixed
+     */
+    public function editAction(){
+        $neoAjax = new neoAjax();
+        $id = (int)$this->params()->fromRoute('id');
+
+        if($id > 0){
+            $request    = $this->getRequest();
+            $post       = $request->getPost();
+            $post_id    = (int)$post->get('id');
+
+            if($post_id < 1){
+
+                $data = $this->getTable()->get($id);
+                $renderer = new PhpRenderer();
+                $resolver = new Resolver\TemplateMapResolver();
+
+                $resolver->setMap(array(
+                    'edit'=>__DIR__ . '../../../../view/admin/blog/edit.phtml'
+                ));
+                $renderer->setResolver($resolver);
+
+                $viewModel = new ViewModel();
+                $viewModel->setTemplate('edit')
+                    ->setVariables(array(
+                        'data'=>$data,
+                        'save_url' => $this->url()->fromRoute('blog', array('action'=>'edit','id'=>$id)),
+                    ));
+
+                $html = $neoAjax->strip($renderer->render($viewModel));
+                $neoAjax->html('#myModal',$html);
+                $neoAjax->showModal('#myModal');
+
+                $neoAjax->script("$('.modal').css('width','100% !important');");
+
+                $neoAjax->script("var editor = CKEDITOR.replace( $('.ckeditor').attr('id') );editor.setData( '".$data->description."' );CKFinder.setupCKEditor( editor, BASE_PATH+'/js/ckfinder' ) ;");
+            }else{
+
+                if($request->isPost()){
+                    $inputFilter = $this->getTable()->setInputFilter()->setData($post);
+
+                    if($inputFilter->isValid()){
+                        $this->getTable()->saveArray($inputFilter->getRawValues());
+                        $neoAjax->alert('İşlem başarılı şekilde gerçekleşti!');
+                        $neoAjax->reload();
+                    }else{
+                        $messages = $inputFilter->getMessages();
+                        if(!empty($messages)){
+                            foreach($messages AS $key=>$message){
+                                $neoAjax->html('#'.$key.'_error',$neoAjax->strip(implode(" ",$message)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $response = $this->getResponse();
+        $response->setContent(\Zend\Json\Json::encode($neoAjax->getResult()));
+        return $response;
+    }
     /**
      * @return mixed
      */

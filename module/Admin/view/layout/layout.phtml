@@ -27,7 +27,7 @@
     <script src="<?php echo $this->basePath();?>/assets/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     <script src="<?php echo $this->basePath();?>/assets/js/neoAjax.js"></script>
 
-    <script type="text/javascript" src="<?php echo $this->basePath();?>/js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="<?php echo $this->basePath();?>/js/ckeditor/ckeditor.js"  charset="utf-8"></script>
     <script type="text/javascript" src="<?php echo $this->basePath();?>/js/ckfinder/ckfinder.js"></script>
     <script type="text/javascript">
         var BASE_PATH = '<?php echo $this->basePath();?>';
@@ -44,7 +44,7 @@
         else
         {
             var editor = CKEDITOR.replace( $('.ckeditor').attr('id') );
-            editor.setData( '<p>Just click the <b>Image</b> or <b>Link</b> button, and then <b>&quot;Browse Server&quot;</b>.</p>' );
+            editor.setData( '' );
 
             // Just call CKFinder.setupCKEditor and pass the CKEditor instance as the first argument.
             // The second parameter (optional), is the path for the CKFinder installation (default = "/ckfinder/").
@@ -53,7 +53,6 @@
             // It is also possible to pass an object with selected CKFinder properties as a second argument.
             // CKFinder.setupCKEditor( editor, { basePath : '../', skin : 'v1' } ) ;
         }
-
     </script>
 </head>
 

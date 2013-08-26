@@ -92,7 +92,7 @@ class UsersController extends AbstractActionController{
 
             if(empty($post_id)){
                 $sm = $this->getServiceLocator();
-                $userGroupTable= $sm->get('User\Model\UserGroupTable');
+                $userGroupTable= $sm->get('Admin\Model\UserGroupTable');
 
                 $data = $this->getTable()->get($id);
                 $renderer = new PhpRenderer();
@@ -153,7 +153,7 @@ class UsersController extends AbstractActionController{
 
         if($username === FALSE){
             $sm = $this->getServiceLocator();
-            $userGroupTable= $sm->get('User\Model\UserGroupTable');
+            $userGroupTable= $sm->get('Admin\Model\UserGroupTable');
 
             $renderer = new PhpRenderer();
             $resolver = new Resolver\TemplateMapResolver();
